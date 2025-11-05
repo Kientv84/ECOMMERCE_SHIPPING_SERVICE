@@ -6,13 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,21 +23,36 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Shipment {
+public class ShipmentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     private UUID id;
-    private UUID orderId;                  // Id đơn hàng từ Order Service
-    private UUID userId;                   // Người đặt hàng
-    private String carrier;                // Hãng vận chuyển (VD: "GHTK", "GHN", "VNPOST", "INTERNAL")
-    private String trackingCode;           // Mã tracking từ bên thứ 3 (VD: GHTK12345)
-    private String destinationAddress;     // Địa chỉ giao hàng
-    private String senderAddress;          // Địa chỉ gửi (kho)
-    private String receiverPhone;          // SĐT người nhận
+    @Column(name = "order_id", nullable = false)
+    private UUID orderId;
+
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
+
+    @Column(name = "carrier", length = 50, nullable = false)
+    private String carrier;
+
+    @Column(name = "tracking_code", length = 100)
+    private String trackingCode;
+
+    @Column(name = "destination_address", columnDefinition = "TEXT", nullable = false)
+    private String destinationAddress;
+
+    @Column(name = "sender_address", columnDefinition = "TEXT", nullable = false)
+    private String senderAddress;
+
+    @Column(name = "receiver_phone", length = 20, nullable = false)
+    private String receiverPhone;
 
     @Enumerated(EnumType.STRING)
-    private ShippingStatus status;         // Trạng thái vận chuyển
-
+    @Column(name = "status", length = 30, nullable = false)
+    private ShippingStatus status;
     // ====== Metadata ======
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
