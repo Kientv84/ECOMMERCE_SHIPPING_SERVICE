@@ -16,7 +16,9 @@ public enum EnumError {
     SHIPMENT_ERR_DEL_EM("SHIPMENT-CATE-GA", "List ids to delete is empty", HttpStatus.BAD_REQUEST),
     SHIPMENT_NOT_FOUND("SHIPMENT-404", "shipment not found", HttpStatus.NOT_FOUND),
     SHIPMENT_SERVICE_UNAVAILABLE("SHIPMENT-503", "shipment service unavailable", HttpStatus.SERVICE_UNAVAILABLE),
-
+    //----------- SHIPMENT TRACKING------------
+    SHIPMENT_TRACKING_GET_ERROR(" SHIPMENT_TRACKING-GET-ERROR", "Have error in process get shipment tracking", HttpStatus.BAD_REQUEST),
+    //----------------------
     INVALID_SHIPMENT_METHOD("INVALID-METHOD", "Invalid shipment method", HttpStatus.NOT_FOUND),
 
     SHIPMENT_PROCESS_NOTNULL("SHIPMENT-PROCESS-NULL", "shipment argument be null!", HttpStatus.BAD_REQUEST),

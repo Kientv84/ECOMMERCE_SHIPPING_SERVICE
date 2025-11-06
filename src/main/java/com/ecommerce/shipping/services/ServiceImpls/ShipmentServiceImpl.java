@@ -39,13 +39,14 @@ public class ShipmentServiceImpl implements ShipmentService {
                    .carrier(event.getShippingCode())
                    .senderAddress("Kho tổng Hà Nội") // Hardcode tạm
                    .trackingCode(null)  // chưa tích hợp bên thứ 3
-                   .status(ShippingStatus.PENDING) // LUÔN MẶC ĐỊNH
+                   .status(ShippingStatus.CREATED) // LUÔN MẶC ĐỊNH
                    .build();
 
            shipmentRepository.save(shipment);
 
 
-           addTracking(shipment.getId(), ShipmentTrackingStatus.DELIVERED, "Đơn hàng đã đến đây");
+           addTracking(shipment.getId(), ShipmentTrackingStatus.PENDING, "Đơn hàng đã sẵn sàng để chuyển đi");
+
 
            return shipmentMapper.mapToShipmentResponse(shipment);
        } catch (Exception e) {
