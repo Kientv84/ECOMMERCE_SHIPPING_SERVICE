@@ -20,4 +20,5 @@ public class ShipmentResponse {
     private String senderAddress;
     private String receiverPhone;
     private String status;
+    boolean isCollected;
 }

@@ -31,4 +31,5 @@ public class CarrierMockController {
     public ResponseEntity<String> handleFail(@RequestBody RequestShipmentId requestBody) {
         return ResponseEntity.ok(carrierMockService.handleFail(requestBody));
     }
+
 }

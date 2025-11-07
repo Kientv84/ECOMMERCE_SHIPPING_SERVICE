@@ -67,11 +67,12 @@ public class CarrierMockServiceImpl implements CarrierMockService{
     @Override
     public String handleComplete( RequestShipmentId requestBody) {
         try {
-            var shipment = shipmentRepository.findById(requestBody.getId())
+            ShipmentEntity shipment = shipmentRepository.findById(requestBody.getId())
                     .orElseThrow(() -> new ServiceException(EnumError.SHIPMENT_GET_ERROR));
 
             saveTracking(shipment, ShipmentTrackingStatus.DELIVERED);
             shipment.setStatus(ShippingStatus.DELIVERED);
+            shipment.setCollected(true);
             shipmentRepository.save(shipment);
 
             // Produce kafka order updated status

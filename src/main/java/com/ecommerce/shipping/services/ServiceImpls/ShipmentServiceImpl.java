@@ -31,6 +31,13 @@ public class ShipmentServiceImpl implements ShipmentService {
            if (event == null ) {
                throw new ServiceException(EnumError.KAFKA_NOT_MESSAGE, "kafka.not.message");
            }
+
+           boolean isCollected = false;
+           if (event.getPaymentStatus() != null
+                   && event.getPaymentStatus().equalsIgnoreCase("PAID")) {
+               isCollected = true;
+           }
+
            ShipmentEntity shipment = ShipmentEntity.builder()
                    .orderId(event.getId())
                    .userId(event.getUserId())
@@ -40,6 +47,7 @@ public class ShipmentServiceImpl implements ShipmentService {
                    .senderAddress("Kho tổng Hà Nội") // Hardcode tạm
                    .trackingCode(null)  // chưa tích hợp bên thứ 3
                    .status(ShippingStatus.CREATED) // LUÔN MẶC ĐỊNH
+                   .isCollected(isCollected)
                    .build();
 
            shipmentRepository.save(shipment);

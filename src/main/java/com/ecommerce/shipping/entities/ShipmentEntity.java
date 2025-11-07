@@ -50,6 +50,9 @@ public class ShipmentEntity {
     @Column(name = "receiver_phone", length = 20, nullable = false)
     private String receiverPhone;
 
+    @Column(name = "is_collected", nullable = false)
+    boolean isCollected;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 30, nullable = false)
     private ShippingStatus status;
