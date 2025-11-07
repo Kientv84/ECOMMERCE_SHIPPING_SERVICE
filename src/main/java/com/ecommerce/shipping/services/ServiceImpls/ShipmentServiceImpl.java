@@ -77,16 +77,51 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public List<ShipmentResponse> getAllShipment() {
-        return List.of();
+        try {
+            List<ShipmentResponse> responses = shipmentRepository.findAll().stream().map(ship -> shipmentMapper.mapToShipmentResponse(ship)).toList();
+
+            return responses;
+
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.SHIPMENT_GET_ERROR, "shipment.get.error");
+        }
     }
 
     @Override
     public ShipmentResponse getShipmentById(UUID uuid) {
-        return null;
+        try {
+            ShipmentEntity shipment = shipmentRepository.findById(uuid).orElseThrow(() -> new ServiceException(EnumError.SHIPMENT_GET_ERROR, "shipment.get.error"));
+
+            return  shipmentMapper.mapToShipmentResponse(shipment);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
+        }
     }
 
     @Override
     public String deleteShipment(List<UUID> uuids) {
-        return "";
+        try {
+            if ( uuids == null || uuids.isEmpty()) {
+                throw new ServiceException(EnumError.SHIPMENT_ERR_DEL_EM, "shipment.err.em");
+            }
+
+            List<ShipmentEntity> foundIds = shipmentRepository.findAllById(uuids);
+
+            System.out.println("Find shipment:" + foundIds.toString());
+
+            if ( foundIds.isEmpty()) {
+                throw new ServiceException(EnumError.SHIPMENT_ERR_NOT_FOUND, "shipment.err.not.found");
+            }
+
+            shipmentRepository.deleteAllById(uuids);
+
+            return "Deleted shipments successfully: {}" + uuids;
+
+        } catch (Exception e) {
+            throw new ServiceException(EnumError.INTERNAL_ERROR, "sys.internal.error");
+        }
     }
 }

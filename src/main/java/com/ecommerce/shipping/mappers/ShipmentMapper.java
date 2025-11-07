@@ -11,5 +11,7 @@ public interface ShipmentMapper {
     @Mapping(target = "status", source = "status")
     ShipmentResponse mapToShipmentResponse(ShipmentEntity shipment);
 
+    @Mapping(target = "shipmentId", source = "id")
+    @Mapping(target = "newStatus", source = "status")
     KafkaShipmentStatusUpdated mapToKafkaShipmentStatusUpdated(ShipmentEntity shipment);
 }

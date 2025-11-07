@@ -12,9 +12,11 @@ import com.ecommerce.shipping.mocks.mockdtos.RequestShipmentId;
 import com.ecommerce.shipping.repositories.ShipmentRepository;
 import com.ecommerce.shipping.repositories.ShipmentTrackingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CarrierMockServiceImpl implements CarrierMockService{
