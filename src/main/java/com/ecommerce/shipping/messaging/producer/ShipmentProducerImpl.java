@@ -1,5 +1,6 @@
 package com.ecommerce.shipping.messaging.producer;
 
+import com.ecommerce.shipping.dtos.responses.kafka.KafkaEventInventory;
 import com.ecommerce.shipping.dtos.responses.kafka.KafkaShipmentStatusUpdated;
 import com.ecommerce.shipping.properties.KafkaTopicProperties;
 import com.ecommerce.shipping.services.KafkaService;
@@ -27,5 +28,26 @@ public class ShipmentProducerImpl implements  ShipmentProducer{
         var topic = kafkaTopicProperties.getErrorOrder();
         log.info("[produceMessageError] producing error to topic {}", topic);
         kafkaService.send(topic, kafkaObject);
+    }
+
+    @Override
+    public void produceShipmentDeduct(KafkaEventInventory kafkaEventInventory) {
+        var topic = kafkaTopicProperties.getShippingShipped();
+        log.info("[produceShipmentDeduct] producing error to topic {}", topic);
+        kafkaService.send(topic, kafkaEventInventory);
+    }
+
+    @Override
+    public void produceShipmentRestore(KafkaEventInventory kafkaEventInventory) {
+        var topic = kafkaTopicProperties.getShippingReturned();
+        log.info("[produceShipmentRestore] producing error to topic {}", topic);
+        kafkaService.send(topic, kafkaEventInventory);
+    }
+
+    @Override
+    public void produceShipmentCompleteTransaction(KafkaEventInventory kafkaEventInventory) {
+        var topic = kafkaTopicProperties.getShippingCompleted();
+        log.info("[produceShipmentCompleteTransaction] producing error to topic {}", topic);
+        kafkaService.send(topic, kafkaEventInventory);
     }
 }

@@ -6,6 +6,7 @@ import com.ecommerce.shipping.dtos.responses.ShipmentResponse;
 import com.ecommerce.shipping.dtos.responses.ShipmentTrackingResponse;
 import com.ecommerce.shipping.dtos.responses.kafka.KafkaOrderShippingResponse;
 import com.ecommerce.shipping.entities.ShipmentEntity;
+import com.ecommerce.shipping.entities.ShipmentItemEntity;
 import com.ecommerce.shipping.entities.ShipmentTrackingEntity;
 import com.ecommerce.shipping.exceptions.EnumError;
 import com.ecommerce.shipping.exceptions.ServiceException;
@@ -49,6 +50,18 @@ public class ShipmentServiceImpl implements ShipmentService {
                    .status(ShippingStatus.CREATED) // LUÔN MẶC ĐỊNH
                    .isCollected(isCollected)
                    .build();
+
+           List<ShipmentItemEntity> items = event.getItems().stream()
+                   .map(item -> ShipmentItemEntity.builder()
+                           .shipment(shipment)
+                           .productId(item.getProductId())
+                           .productName(item.getProductName())
+                           .quantity(item.getQuantity())
+                           .unitPrice(item.getProductPrice())
+                           .build())
+                   .toList();
+
+           shipment.setItems(items);
 
            shipmentRepository.save(shipment);
 

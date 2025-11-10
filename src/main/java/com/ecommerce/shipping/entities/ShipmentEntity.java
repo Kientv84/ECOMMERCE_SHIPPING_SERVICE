@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -40,6 +41,12 @@ public class ShipmentEntity {
 
     @Column(name = "tracking_code", length = 100)
     private String trackingCode;
+
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShipmentItemEntity> items;
+
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShipmentTrackingEntity> trackings;
 
     @Column(name = "destination_address", columnDefinition = "TEXT", nullable = false)
     private String destinationAddress;

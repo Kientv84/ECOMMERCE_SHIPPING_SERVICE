@@ -58,6 +58,14 @@ public class CarrierMockServiceImpl implements CarrierMockService{
             // Produce kafka order updated status
             shipmentProducer.produceShipmentEventUpdateOrderStatus(shipmentMapper.mapToKafkaShipmentStatusUpdated(shipment));
 
+            if (next == ShipmentTrackingStatus.PICKED_UP) {
+                log.info("[handleNext] Shipment PICKED_UP -> produce inventory.deduct event");
+                shipmentProducer.produceShipmentDeduct(
+                        shipmentMapper.mapToKafkaEventInventory(shipment)
+                );
+            }
+
+
             return "Updated to: " + next;
         } catch (Exception e) {
             throw new ServiceException(EnumError.INTERNAL_ERROR, "Mock fail");
@@ -77,6 +85,9 @@ public class CarrierMockServiceImpl implements CarrierMockService{
 
             // Produce kafka order updated status
             shipmentProducer.produceShipmentEventUpdateOrderStatus(shipmentMapper.mapToKafkaShipmentStatusUpdated(shipment));
+
+            //Produce message restore
+            shipmentProducer.produceShipmentCompleteTransaction(shipmentMapper.mapToKafkaEventInventory(shipment));
 
             return "Shipment marked as DELIVERED";
 
@@ -103,6 +114,9 @@ public class CarrierMockServiceImpl implements CarrierMockService{
 
             // Produce kafka order updated status
             shipmentProducer.produceShipmentEventUpdateOrderStatus(shipmentMapper.mapToKafkaShipmentStatusUpdated(shipment));
+
+            //Produce message restore
+            shipmentProducer.produceShipmentRestore(shipmentMapper.mapToKafkaEventInventory(shipment));
 
             return "Shipment marked as RETURNED";
 
