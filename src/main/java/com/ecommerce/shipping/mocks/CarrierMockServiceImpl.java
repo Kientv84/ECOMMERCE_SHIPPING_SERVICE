@@ -58,8 +58,8 @@ public class CarrierMockServiceImpl implements CarrierMockService{
             // Produce kafka order updated status
             shipmentProducer.produceShipmentEventUpdateOrderStatus(shipmentMapper.mapToKafkaShipmentStatusUpdated(shipment));
 
-            if (next == ShipmentTrackingStatus.PICKED_UP) {
-                log.info("[handleNext] Shipment PICKED_UP -> produce inventory.deduct event");
+            if (shipment.getStatus() == ShippingStatus.SHIPPED) {
+                log.info("[handleNext] Shipment {} status=SHIPPED -> produce inventory.deduct event", shipment.getId());
                 shipmentProducer.produceShipmentDeduct(
                         shipmentMapper.mapToKafkaEventInventory(shipment)
                 );
@@ -86,7 +86,7 @@ public class CarrierMockServiceImpl implements CarrierMockService{
             // Produce kafka order updated status
             shipmentProducer.produceShipmentEventUpdateOrderStatus(shipmentMapper.mapToKafkaShipmentStatusUpdated(shipment));
 
-            //Produce message restore
+            //Produce message
             shipmentProducer.produceShipmentCompleteTransaction(shipmentMapper.mapToKafkaEventInventory(shipment));
 
             return "Shipment marked as DELIVERED";

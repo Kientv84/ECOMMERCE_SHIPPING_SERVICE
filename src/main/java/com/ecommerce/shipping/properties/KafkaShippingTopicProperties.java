@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Getter
 @Setter
-@ConfigurationProperties("spring.kafka.order.topic")
-public class KafkaTopicProperties {
-    private String orderUpdated;
-    private String errorOrder;
-
+@ConfigurationProperties("spring.kafka.shipping.topic")
+public class KafkaShippingTopicProperties {
+    private String shippingShipped;
+    private String shippingReturned;
+    private String shippingCompleted;
 }

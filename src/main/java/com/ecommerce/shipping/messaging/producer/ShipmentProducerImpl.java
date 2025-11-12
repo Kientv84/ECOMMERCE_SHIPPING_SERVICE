@@ -2,6 +2,7 @@ package com.ecommerce.shipping.messaging.producer;
 
 import com.ecommerce.shipping.dtos.responses.kafka.KafkaEventInventory;
 import com.ecommerce.shipping.dtos.responses.kafka.KafkaShipmentStatusUpdated;
+import com.ecommerce.shipping.properties.KafkaShippingTopicProperties;
 import com.ecommerce.shipping.properties.KafkaTopicProperties;
 import com.ecommerce.shipping.services.KafkaService;
 import com.ecommerce.shipping.utils.KafkaObjectError;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ShipmentProducerImpl implements  ShipmentProducer{
     private final KafkaTopicProperties kafkaTopicProperties;
+    private final KafkaShippingTopicProperties kafkaShippingTopicProperties;
     private final KafkaService kafkaService;
 
     @Override
@@ -32,21 +34,21 @@ public class ShipmentProducerImpl implements  ShipmentProducer{
 
     @Override
     public void produceShipmentDeduct(KafkaEventInventory kafkaEventInventory) {
-        var topic = kafkaTopicProperties.getShippingShipped();
+        var topic = kafkaShippingTopicProperties.getShippingShipped();
         log.info("[produceShipmentDeduct] producing error to topic {}", topic);
         kafkaService.send(topic, kafkaEventInventory);
     }
 
     @Override
     public void produceShipmentRestore(KafkaEventInventory kafkaEventInventory) {
-        var topic = kafkaTopicProperties.getShippingReturned();
+        var topic = kafkaShippingTopicProperties.getShippingReturned();
         log.info("[produceShipmentRestore] producing error to topic {}", topic);
         kafkaService.send(topic, kafkaEventInventory);
     }
 
     @Override
     public void produceShipmentCompleteTransaction(KafkaEventInventory kafkaEventInventory) {
-        var topic = kafkaTopicProperties.getShippingCompleted();
+        var topic = kafkaShippingTopicProperties.getShippingCompleted();
         log.info("[produceShipmentCompleteTransaction] producing error to topic {}", topic);
         kafkaService.send(topic, kafkaEventInventory);
     }

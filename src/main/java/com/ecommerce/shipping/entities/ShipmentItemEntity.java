@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Entity
 @Table(name = "shipment_item_entity")
 @Data
 @NoArgsConstructor
